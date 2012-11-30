@@ -83,3 +83,14 @@
 ;; カラーテーマ
 (color-theme-molokai)
 
+;; ------------------------------------------------------------------------
+;; auto-complete
+
+;; なぜかパッケージインストールができないので手動インストール
+(setq load-path (append
+		 '("~/.emacs.d/elisp/auto-complete-1.4")
+		 load-path))
+;(add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
+(require 'auto-complete-config)
+(ac-config-default)
+
