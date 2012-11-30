@@ -74,3 +74,7 @@
 ;; 画面スクロール時の重複行数
 (setq next-screen-context-lines 1)
 
+;; ------------------------------------------------------------------------
+;; helm-mode
+(global-set-key [?\C-;] 'helm-mini)
+(helm-mode 1)
