@@ -78,3 +78,8 @@
 ;; helm-mode
 (global-set-key [?\C-;] 'helm-mini)
 (helm-mode 1)
+
+;; ------------------------------------------------------------------------
+;; カラーテーマ
+(color-theme-molokai)
+
