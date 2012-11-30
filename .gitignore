@@ -1,0 +1,16 @@
+
+*.obj
+*.a
+*~
+*.elc
+*.pdb
+*.bak
+
+/work
+/cafe
+/tmp
+/log
+/backup
+
+/work/network/FishingPHP/nbproject/private/
+/work/network/fuelfish/nbproject/private/
