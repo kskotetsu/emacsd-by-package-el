@@ -47,17 +47,6 @@
 (setq truncate-lines t)                 ;長い行を折り返し表示しない
 ;(setq truncate-lines nil)
 
-;; y/n, yes/no の問い合わせ時に IME をオフにする
-(wrap-function-to-control-ime 'y-or-n-p nil nil)
-(wrap-function-to-control-ime 'yes-or-no-p nil nil)
-
-;; GCの頻度を増やす
-(setq gc-cons-threshold 100000) 
-;; GCの頻度を減らす
-;(setq gc-cons-threshold 5242880)
-
-;; ------------------------------------------------------------------------
-;; 個人的な基本キーボード設定
 (global-set-key "\C-h" 'backward-delete-char)
 (global-set-key "\C-o" 'toggle-input-method)
 (global-set-key "\M-g" 'goto-line)
@@ -87,9 +76,36 @@
 (global-set-key (kbd "C-c k") 'windmove-up)
 (global-set-key (kbd "C-c j") 'windmove-down)
 
+;; y/n, yes/no の問い合わせ時に IME をオフにする
+(wrap-function-to-control-ime 'y-or-n-p nil nil)
+(wrap-function-to-control-ime 'yes-or-no-p nil nil)
+
+;; GCの頻度を増やす
+(setq gc-cons-threshold 100000) 
+;; GCの頻度を減らす
+;(setq gc-cons-threshold 5242880)
+
 ;;---------------------------------------------------------------------
 ;; 検索設定
 (setq case-fold-search t)               ;検索では大文字小文字を区別しない
+
+;; ------------------------------------------------------------------------
+;; カーソル
+
+;; カーソル点滅表示
+(blink-cursor-mode 0)
+
+;; スクロール時のカーソル位置の維持
+(setq scroll-preserve-screen-position t)
+
+;; スクロール行数（一行ごとのスクロール）
+(setq vertical-centering-font-regexp ".*")
+(setq scroll-conservatively 35)
+(setq scroll-margin 0)
+(setq scroll-step 1)
+
+;; 画面スクロール時の重複行数
+(setq next-screen-context-lines 1)
 
 ;; ------------------------------------------------------------------------
 ;; 見た目
@@ -116,25 +132,6 @@
 (color-theme-molokai)
 
 ;; ------------------------------------------------------------------------
-;; カーソル
-
-;; カーソル点滅表示
-(blink-cursor-mode 0)
-
-;; スクロール時のカーソル位置の維持
-(setq scroll-preserve-screen-position t)
-
-;; スクロール行数（一行ごとのスクロール）
-(setq vertical-centering-font-regexp ".*")
-(setq scroll-conservatively 35)
-(setq scroll-margin 0)
-(setq scroll-step 1)
-
-;; 画面スクロール時の重複行数
-(setq next-screen-context-lines 1)
-
-
-;; ------------------------------------------------------------------------
 ;; helm-mode
 (global-set-key [?\C-;] 'helm-mini)
 (helm-mode 1)
@@ -148,11 +145,12 @@
 (require 'auto-complete-config)
 (ac-config-default)
 (global-auto-complete-mode t)
-;; M-/をdabbrevからauto-completeに変更
+
 (global-set-key [?\M-/] 'auto-complete)
 
 ;; ------------------------------------------------------------------------
 ;; org-mode
+
 (setq org-startup-truncated nil)
 (setq org-return-follows-link t)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -232,4 +230,3 @@
  '(org-date ((t (:foreground "DodgerBlue1" :underline t) )) t)
  '(org-link ((t (:foreground "saddle brown" :underline t) )) t)
  )
-
