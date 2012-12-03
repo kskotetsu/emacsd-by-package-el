@@ -107,6 +107,32 @@
 ;; 画面スクロール時の重複行数
 (setq next-screen-context-lines 1)
 
+;; マウスのホイールスクロールスピードを調節
+;; (連続して回しているととんでもない早さになってしまう。特にLogicoolのマウス)
+(defun scroll-down-with-lines ()
+  "" (interactive) (scroll-down 3))
+(defun scroll-up-with-lines ()
+  "" (interactive) (scroll-up 3))
+(global-set-key [wheel-up] 'scroll-down-with-lines)
+(global-set-key [wheel-down] 'scroll-up-with-lines)
+(global-set-key [double-wheel-up] 'scroll-down-with-lines)
+(global-set-key [double-wheel-down] 'scroll-up-with-lines)
+(global-set-key [triple-wheel-up] 'scroll-down-with-lines)
+(global-set-key [triple-wheel-down] 'scroll-up-with-lines)
+
+(global-set-key [wheel-up]
+                '(lambda () "" (interactive) (scroll-down 1)))
+(global-set-key [wheel-down]
+                '(lambda () "" (interactive) (scroll-up 1)))
+(global-set-key [double-wheel-up]
+                '(lambda () "" (interactive) (scroll-down 2)))
+(global-set-key [double-wheel-down]
+                '(lambda () "" (interactive) (scroll-up 2)))
+(global-set-key [triple-wheel-up]
+                '(lambda () "" (interactive) (scroll-down 3)))
+(global-set-key [triple-wheel-down]
+                '(lambda () "" (interactive) (scroll-up 3)))
+
 ;; ------------------------------------------------------------------------
 ;; 見た目
 
@@ -130,6 +156,11 @@
 
 ;; カラーテーマ
 (color-theme-molokai)
+
+;; linum-mode時に遅延リフレッシュさせて動作を早くする
+(setq linum-delay t)
+(defadvice linum-schedule (around my-linum-schedule () activate)
+  (run-with-idle-timer 0.2 nil #'linum-update-current))
 
 ;; ------------------------------------------------------------------------
 ;; popwin
