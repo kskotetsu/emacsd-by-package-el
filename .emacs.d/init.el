@@ -189,23 +189,23 @@
 (require 'cygwin-mount)
 (cygwin-mount-activate)
 ;; shellの文字化けを回避
-;; (add-hook 'shell-mode-hook
-;;           (lambda ()
-;;             (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix)
-;;             ))
+(add-hook 'shell-mode-hook
+          (lambda ()
+            (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix)
+            ))
 
-(setq shell-mode-hook
-      (function
-       (lambda ()
+;; (setq shell-mode-hook
+;;       (function
+;;        (lambda ()
 
-	 ;; シェルモードの入出力文字コード
-	 (set-buffer-process-coding-system 'sjis-dos 'sjis-unix)
-	 (set-buffer-file-coding-system    'sjis-unix)
-	 )))
+;; 	 ;; シェルモードの入出力文字コード
+;; 	 (set-buffer-process-coding-system 'sjis-dos 'sjis-unix)
+;; 	 (set-buffer-file-coding-system    'sjis-unix)
+;; 	 )))
 
 (setq cygwin-mount-cygwin-bin-directory
       (concat (getenv "CYGWIN_DIR") "\\bin"))
-(require 'setup-cygwin)
+;(require 'setup-cygwin)
 
 ;; ------------------------------------------------------------------------
 ;; @ shell
