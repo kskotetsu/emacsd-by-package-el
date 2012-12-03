@@ -311,3 +311,11 @@
  '(org-date ((t (:foreground "DodgerBlue1" :underline t) )) t)
  '(org-link ((t (:foreground "saddle brown" :underline t) )) t)
  )
+
+
+;; ------------------------------------------------------------------------
+;; magit
+(require 'magit)
+(setq magit-git-standard-options (append magit-git-standard-options
+                                              '("-c" "core.quotepath=false")))
+
