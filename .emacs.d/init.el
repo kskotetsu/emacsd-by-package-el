@@ -177,10 +177,12 @@
 
 ;; なぜかパッケージインストールができないので手動インストール
 (setq load-path (cons "~/.emacs.d/elisp/auto-complete-1.4" load-path))
+(setq load-path (cons "~/.emacs.d/elisp/" load-path))
 ;(add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
 (require 'auto-complete-config)
 (ac-config-default)
 (global-auto-complete-mode t)
+(require 'ac-python)
 
 (global-set-key [?\M-/] 'auto-complete)
 
@@ -285,14 +287,17 @@
 (define-key global-map "\C-ca" 'org-agenda)
 
 ;; org-capture
-;; (("t" "Todo" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?\n   %i\n   %a  %t")
-;;  ("s" "Schedule" entry (file+headline "~/memo/agenda.org" "Tasks") "** %?  %i  %a  %U")
-;;  ("w" "Work" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?   :work:  %i  %a  %U")
-;;  ("l" "WorkLog" entry (file+headline "~/memo/agenda.org" "Logs") "** %t   :log:")
-;;  ("h" "Home" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?   :home: %i %a %U")
-;;  ("c" "CafeTODO" entry (file+headline "~/memo/cafe.org" "Inbox") "** TODO %?   :cafe: %i %a %U")
-;;  ("m" "Memo" entry (file+headline "~/memo/note.org" "Memo") "** %? %i %a %U"))
-;(define-key global-map "\C-cr" 'org-capture)
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?\n   %i\n   %a  %T")
+	("s" "Schedule" entry (file+headline "~/memo/agenda.org" "Tasks") "** %?  %i  %a  %U")
+	("w" "Work" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?   :work:  %i  %a  %U")
+	("l" "WorkLog" entry (file+headline "~/memo/agenda.org" "Logs") "** %t   :log:")
+	("h" "Home" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?   :home: %i %a %U")
+	("c" "CafeTODO" entry (file+headline "~/memo/cafe.org" "Inbox") "** TODO %?   :cafe: %i %a %U")
+	("m" "Memo" entry (file+headline "~/memo/note.org" "Memo") "** %? %i %a %U")
+	))
+(define-key global-map "\C-cc" 'org-capture)
+
 (setq org-startup-truncated nil)
 (defun org-change-truncation()
   (interactive)
@@ -311,3 +316,9 @@
  '(org-date ((t (:foreground "DodgerBlue1" :underline t) )) t)
  '(org-link ((t (:foreground "saddle brown" :underline t) )) t)
  )
+
+;; ------------------------------------------------------------------------
+;; Python
+
+(require 'flymake-python-pyflakes)
+(add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
