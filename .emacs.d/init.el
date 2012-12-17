@@ -188,8 +188,8 @@
 
 ;; ------------------------------------------------------------------------
 ;; シェル
-(require 'cygwin-mount)
-(cygwin-mount-activate)
+;(require 'cygwin-mount)
+;(cygwin-mount-activate)
 ;; shellの文字化けを回避
 (add-hook 'shell-mode-hook
           (lambda ()
