@@ -31,8 +31,8 @@
 (setq w32-ime-mode-line-state-indicator-list '("[Aa]" "[あ]" "[Aa]"))
 (w32-ime-initialize)			;IMEの初期化
 ;(set-cursor-color "red")		;IME OFF時の初期カーソルカラー
-(setq w32-ime-buffer-switch-p nil)	;バッファ切り替え時にIME状態を引き継ぐ
-(setq default-input-method "W32-IME") ;標準IMEの設定
+(setq w32-ime-buffer-switch-p nil)		;バッファ切り替え時にIME状態を引き継ぐ
+(setq default-input-method "W32-IME")	;標準IMEの設定
 ;(set-input-method "W32-IME") ;標準IMEの設定
 
 ;IME ON/OFF時のカーソルカラー
@@ -226,6 +226,7 @@
 (define-key global-map [(M /)] 'auto-complete)
 
 (require 'auto-complete-clang)
+;; C++モードの設定
 (defun my-ac-cc-mode-setup ()
   ;;4文字入力時点で補完画面を出す．nilなら補完キーによって出る
   (setq ac-auto-start 4)
@@ -238,6 +239,7 @@
 		     ))
   )
 
+;; ------------------------------------------------------------------------
 ;; C++モード
 ; プリコンパイルヘッダの作り方
 ; clang++ -cc1 -emit-pch -x c++-header ./stdafx.h -o stdafx.pch　-I(インクルードディレクトリ)
@@ -247,27 +249,27 @@
 			    (setq c-auto-newline nil)
 			    
 			    (setq c-auto-newline nil)
-			    ;;(linum-mode)
-			    (setq c++-tab-always-indent nil) ; [TAB] キーで、TABコードを入力
-			    (setq c-tab-always-indent nil) ; [TAB] キーで、TABコードを入力
+														;;(linum-mode)
+			    (setq c++-tab-always-indent nil)		; [TAB] キーで、TABコードを入力
+			    (setq c-tab-always-indent nil)			; [TAB] キーで、TABコードを入力
 			    (setq indent-tabs-mode t)
-			    (show-paren-mode t) ;対応する括弧を表示
+			    (show-paren-mode t)						;対応する括弧を表示
 			    (setq tab-width 4)
 			    (c-toggle-hungry-state -1)
-			    (setq truncate-lines t) ;長い行を折り返し表示しない
-					;			  (setq show-paren-style 'expression)
+			    (setq truncate-lines t)					;長い行を折り返し表示しない
+				;(setq show-paren-style 'expression)
 			    (c-set-style "stroustrup")	
 			    (local-set-key "\C-m" 'newline-and-indent)
 			    (local-set-key "\C-j" 'newline-and-indent)
 			    (setq dabbrev-case-fold-search nil)
-			    ;; (setq comment-start "// "
-			    ;; 		comment-end " "
-			    ;; 		)
+														;; (setq comment-start "// "
+														;; 		comment-end " "
+														;; 		)
 			    (font-lock-fontify-buffer)
 			    (setq font-lock-keywords c++-font-lock-keywords-2)
-			    ;; http://d.hatena.ne.jp/i_s/20091026/1256557730
-			    (c-set-offset 'innamespace 0)   ; namespace {}の中はインデントしない
-			    (c-set-offset 'arglist-close 0) ; 関数の引数リストの閉じ括弧はインデントしない
+				;; http://d.hatena.ne.jp/i_s/20091026/1256557730
+			    (c-set-offset 'innamespace 0)			; namespace {}の中はインデントしない
+			    (c-set-offset 'arglist-close 0)			; 関数の引数リストの閉じ括弧はインデントしない
 			    (c-set-offset 'label 0)
 			    (c-set-offset 'substatement-open 0)
 			    (c-set-offset 'statement-case-intro 2)
@@ -379,13 +381,13 @@
 ;; org-capture
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?\n   %i\n   %a  %T")
-	("s" "Schedule" entry (file+headline "~/memo/agenda.org" "Tasks") "** %?  %i  %a  %U")
-	("w" "Work" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?   :work:  %i  %a  %U")
-	("l" "WorkLog" entry (file+headline "~/memo/agenda.org" "Logs") "** %t   :log:")
-	("h" "Home" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?   :home: %i %a %U")
-	("c" "CafeTODO" entry (file+headline "~/memo/cafe.org" "Inbox") "** TODO %?   :cafe: %i %a %U")
-	("m" "Memo" entry (file+headline "~/memo/note.org" "Memo") "** %? %i %a %U")
-	))
+		("s" "Schedule" entry (file+headline "~/memo/agenda.org" "Tasks") "** %?  %i  %a  %U")
+		("w" "Work" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?   :work:  %i  %a  %U")
+		("l" "WorkLog" entry (file+headline "~/memo/agenda.org" "Logs") "** %t   :log:")
+		("h" "Home" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?   :home: %i %a %U")
+		("c" "CafeTODO" entry (file+headline "~/memo/cafe.org" "Inbox") "** TODO %?   :cafe: %i %a %U")
+		("m" "Memo" entry (file+headline "~/memo/note.org" "Memo") "** %? %i %a %U")
+		))
 (define-key global-map "\C-cc" 'org-capture)
 
 (setq org-startup-truncated nil)
@@ -429,7 +431,7 @@
 ;;          ))
 (setq gtags-mode-hook
       '(lambda ()
-	 (helm-gtags-mode 1)
+		 (helm-gtags-mode 1)
          (local-set-key "\M-t" 'helm-gtags-find-tag)
          (local-set-key "\M-r" 'helm-gtags-find-rtag)
          (local-set-key "\M-s" 'helm-gtags-find-symbol)
