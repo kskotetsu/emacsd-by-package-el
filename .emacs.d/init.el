@@ -76,6 +76,10 @@
 (global-set-key (kbd "C-c k") 'windmove-up)
 (global-set-key (kbd "C-c j") 'windmove-down)
 
+;; backspaceキーをインクリメンタルサーチ中のミニバッファで有効にする
+(define-key isearch-mode-map [backspace] 'isearch-delete-char)
+(define-key isearch-mode-map (kbd "C-h") 'isearch-delete-char)
+
 ;; y/n, yes/no の問い合わせ時に IME をオフにする
 (wrap-function-to-control-ime 'y-or-n-p nil nil)
 (wrap-function-to-control-ime 'yes-or-no-p nil nil)
@@ -169,9 +173,44 @@
 
 ;; ------------------------------------------------------------------------
 ;; helm-mode
-(global-set-key [?\C-;] 'helm-mini)
+;(global-set-key [?\C-;] 'helm-mini)
+(define-key global-map [(C \;)] 'helm-mini)
 (helm-mode 1)
 
+(defun helm-c-sources-git-project-for (pwd)
+  (loop for elt in
+        '(("Modified files" . "--modified")
+          ("Untracked files" . "--others --exclude-standard")
+          ("All controlled files in this project" . nil))
+        for title  = (format "%s (%s)" (car elt) pwd)
+        for option = (cdr elt)
+        for cmd    = (format "git ls-files %s" (or option ""))
+        collect
+        `((name . ,title)
+          (init . (lambda ()
+                    (unless (and (not ,option) (helm-candidate-buffer))
+                      (with-current-buffer (helm-candidate-buffer 'global)
+                        (call-process-shell-command ,cmd nil t nil)))))
+          (candidates-in-buffer)
+          (type . file))))
+
+(defun helm-git-project-topdir ()
+  (file-name-as-directory
+   (replace-regexp-in-string
+    "\n" ""
+    (shell-command-to-string "git rev-parse --show-toplevel"))))
+
+(defun helm-git-project ()
+  (interactive)
+  (let ((topdir (helm-git-project-topdir)))
+    (unless (file-directory-p topdir)
+      (error "I'm not in Git Repository!!"))
+    (let* ((default-directory topdir)
+           (sources (helm-c-sources-git-project-for default-directory)))
+      (helm-other-buffer sources "*helm git project*"))))
+
+;(global-set-key C-x C-r 'helm-git-project)
+(define-key global-map [(C x) (C p)] 'helm-git-project)
 ;; ------------------------------------------------------------------------
 ;; auto-complete
 
@@ -184,12 +223,63 @@
 (global-auto-complete-mode t)
 (require 'ac-python)
 
-(global-set-key [?\M-/] 'auto-complete)
+(define-key global-map [(M /)] 'auto-complete)
+
+(require 'auto-complete-clang)
+(defun my-ac-cc-mode-setup ()
+  ;;4文字入力時点で補完画面を出す．nilなら補完キーによって出る
+  (setq ac-auto-start 4)
+  ;;(setq ac-clang-prefix-header "~/.emacs.d/ac-dict/stdafx.pch")
+  (setq ac-clang-flags '("-w" "-ferror-limit" "1"))
+  (setq ac-sources '(
+		     ac-source-clang
+		     ac-source-yasnippet  
+		     ac-source-gtags
+		     ))
+  )
+
+;; C++モード
+; プリコンパイルヘッダの作り方
+; clang++ -cc1 -emit-pch -x c++-header ./stdafx.h -o stdafx.pch　-I(インクルードディレクトリ)
+(add-hook 'c++-mode-hook '(lambda ()
+			    (my-ac-cc-mode-setup)
+			    (gtags-mode 1)
+			    (setq c-auto-newline nil)
+			    
+			    (setq c-auto-newline nil)
+			    ;;(linum-mode)
+			    (setq c++-tab-always-indent nil) ; [TAB] キーで、TABコードを入力
+			    (setq c-tab-always-indent nil) ; [TAB] キーで、TABコードを入力
+			    (setq indent-tabs-mode t)
+			    (show-paren-mode t) ;対応する括弧を表示
+			    (setq tab-width 4)
+			    (c-toggle-hungry-state -1)
+			    (setq truncate-lines t) ;長い行を折り返し表示しない
+					;			  (setq show-paren-style 'expression)
+			    (c-set-style "stroustrup")	
+			    (local-set-key "\C-m" 'newline-and-indent)
+			    (local-set-key "\C-j" 'newline-and-indent)
+			    (setq dabbrev-case-fold-search nil)
+			    ;; (setq comment-start "// "
+			    ;; 		comment-end " "
+			    ;; 		)
+			    (font-lock-fontify-buffer)
+			    (setq font-lock-keywords c++-font-lock-keywords-2)
+			    ;; http://d.hatena.ne.jp/i_s/20091026/1256557730
+			    (c-set-offset 'innamespace 0)   ; namespace {}の中はインデントしない
+			    (c-set-offset 'arglist-close 0) ; 関数の引数リストの閉じ括弧はインデントしない
+			    (c-set-offset 'label 0)
+			    (c-set-offset 'substatement-open 0)
+			    (c-set-offset 'statement-case-intro 2)
+			    (c-set-offset 'inline-open 0)
+			    (c-set-offset 'case-label 2)
+			    
+			    ))
 
 ;; ------------------------------------------------------------------------
 ;; シェル
-;(require 'cygwin-mount)
-;(cygwin-mount-activate)
+(require 'cygwin-mount)
+(cygwin-mount-activate)
 ;; shellの文字化けを回避
 (add-hook 'shell-mode-hook
           (lambda ()
@@ -326,3 +416,25 @@
 ;; ------------------------------------------------------------------------
 ;; expand-region
 (global-set-key "\M-\[" 'er/expand-region) 
+
+;; ------------------------------------------------------------------------
+;; gtags
+(autoload 'gtags-mode "gtags" "" t)
+;; (setq gtags-mode-hook
+;;       '(lambda ()
+;;          (local-set-key "\M-t" 'gtags-find-tag)
+;;          (local-set-key "\M-r" 'gtags-find-rtag)
+;;          (local-set-key "\M-s" 'gtags-find-symbol)
+;;          (local-set-key "\C-t" 'gtags-pop-stack)
+;;          ))
+(setq gtags-mode-hook
+      '(lambda ()
+	 (helm-gtags-mode 1)
+         (local-set-key "\M-t" 'helm-gtags-find-tag)
+         (local-set-key "\M-r" 'helm-gtags-find-rtag)
+         (local-set-key "\M-s" 'helm-gtags-find-symbol)
+         (local-set-key "\C-t" 'gtags-pop-stack)
+         ))
+
+;; move to home dir
+(cd "~")
