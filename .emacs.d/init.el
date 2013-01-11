@@ -42,6 +42,7 @@
 	  (lambda() (set-cursor-color "white")))
 
 (setq tab-width 4)
+(setq default-tab-width 4)
 (setq c-basic-offset 4)
 ;; バッファ画面外文字の切り詰め表示
 (setq truncate-lines t)                 ;長い行を折り返し表示しない
@@ -262,9 +263,9 @@
 			    (local-set-key "\C-m" 'newline-and-indent)
 			    (local-set-key "\C-j" 'newline-and-indent)
 			    (setq dabbrev-case-fold-search nil)
-														;; (setq comment-start "// "
-														;; 		comment-end " "
-														;; 		)
+				;; (setq comment-start "// "
+				;; 		comment-end " "
+				;; 		)
 			    (font-lock-fontify-buffer)
 			    (setq font-lock-keywords c++-font-lock-keywords-2)
 				;; http://d.hatena.ne.jp/i_s/20091026/1256557730
@@ -437,6 +438,23 @@
          (local-set-key "\M-s" 'helm-gtags-find-symbol)
          (local-set-key "\C-t" 'gtags-pop-stack)
          ))
+;; ------------------------------------------------------------------------
+;; guide-key
+(require 'guide-key)
+(setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
+(setq guide-key/highlight-command-regexp "rectangle")
+(defun guide-key/my-hook-function-for-org-mode ()
+  (guide-key/add-local-guide-key-sequence "C-c")
+  (guide-key/add-local-guide-key-sequence "C-c C-x")
+  (guide-key/add-local-highlight-command-regexp "org-"))
+(add-hook 'org-mode-hook 'guide-key/my-hook-function-for-org-mode)
+(guide-key-mode 1)  ; guide-key-mode を有効にする
+
+
+; server start for emacs-client
+(require 'server)
+(unless (server-running-p)
+  (server-start))
 
 ;; move to home dir
 (cd "~")
