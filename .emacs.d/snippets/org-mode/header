@@ -1,0 +1,10 @@
+#name : org header
+# --
+#-*- coding:utf-8-dos -*-
+
+#+TITLE:    
+#+OPTIONS:  H:2  num:nil  toc:t  \n:nil  @:t  ::t  |:t  ^:t  *:nil  TeX:t LaTeX:t
+#+OPTIONS:  creator:nil timestamp:nil author:nil
+#+ATTR_HTML: id="table1" border="2" rules="all" frame="all"
+  #+STYLE: <link rel="stylesheet" type="text/css" href="org.css">
+

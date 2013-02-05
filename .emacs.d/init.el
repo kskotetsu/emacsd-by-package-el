@@ -21,10 +21,17 @@
 (set-keyboard-coding-system 'cp932)
 
 (prefer-coding-system 'utf-8-dos)
+(set-default-coding-systems 'utf-8-dos)
 (set-file-name-coding-system 'cp932)
 (setq default-process-coding-system '(cp932 . cp932))
 
 (set-language-environment "Japanese")
+
+;; grep
+;(if (file-exists-p "/usr/bin/lgrep")
+(setq grep-command "lgrep -nk -Os ")
+(setq grep-program "lgrep")
+;(setq helm-c-grep-default-command "lgrep -nK -Os ")
 
 ;; IME状態のモードライン表示
 (setq-default w32-ime-mode-line-state-indicator "[Aa]")
@@ -75,7 +82,8 @@
 (global-set-key (kbd "C-c h") 'windmove-left)
 (global-set-key (kbd "C-c l") 'windmove-right)
 (global-set-key (kbd "C-c k") 'windmove-up)
-(global-set-key (kbd "C-c j") 'windmove-down)
+
+(global-set-key (kbd "C-S-g") 'helm-do-grep)
 
 ;; backspaceキーをインクリメンタルサーチ中のミニバッファで有効にする
 (define-key isearch-mode-map [backspace] 'isearch-delete-char)
@@ -455,6 +463,9 @@
 (require 'server)
 (unless (server-running-p)
   (server-start))
+
+; popwin 
+(push '("*grep*" :noselect t) popwin:special-display-config)
 
 ;; move to home dir
 (cd "~")
