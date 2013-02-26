@@ -29,12 +29,13 @@
 ;; 基本的な設定
 
 ;; 日本語入力のための設定
-(set-keyboard-coding-system 'cp932)
+;(set-keyboard-coding-system 'cp932)
 
 (prefer-coding-system 'utf-8-dos)
 (set-default-coding-systems 'utf-8-dos)
-(set-file-name-coding-system 'cp932)
-(setq default-process-coding-system '(cp932 . cp932))
+;(set-file-name-coding-system 'cp932)
+;(setq default-process-coding-system '(cp932 . cp932))
+(setq default-process-coding-system '(utf8-dos . utf8-dos))
 
 (set-language-environment "Japanese")
 
@@ -384,12 +385,12 @@
  '(org-agenda-date ((t :weight bold))))
 
 (setq org-remember-templates
-      '(("Todo" ?t "** TODO %?\n   %i\n   %a\n   %t" "~/memo/agenda.org" "Inbox")
-        ("Schedule" ?s "** %?\n   %i\n   %a\n   %U" "~/memo/agenda.org" "Tasks")
-        ("Work" ?w "** TODO %?   :work:\n   %i\n   %a\n   %U" "~/memo/agenda.org" "Inbox")
-        ("Log"  ?l "** %t   :log:\n   \n" "~/memo/agenda.org" "Logs")
-        ("Home" ?h "** TODO %?   :home:\n   %i\n   %a\n   %U" "~/memo/agenda.org" "Inbox")
-        ("Memo" ?m "** %?\n   %i\n   %a\n   %U" "~/memo/note.org" "Memo")
+      '(("Todo"		?t "** TODO %?\n   %i\n   %a\n   %t" "~/memo/agenda.org" "Inbox")
+        ("Schedule"	?s "** %?\n   %i\n   %a\n   %U" "~/memo/agenda.org" "Tasks")
+        ("Work"		?w "** TODO %?   :work:\n   %i\n   %a\n   %U" "~/memo/agenda.org" "Inbox")
+        ("Log"		?l "** %t   :log:\n   \n" "~/memo/agenda.org" "Logs")
+        ("Home"		?h "** TODO %?   :home:\n   %i\n   %a\n   %U" "~/memo/agenda.org" "Inbox")
+        ("Memo"		?m "** %?\n   %i\n   %a\n   %U" "~/memo/note.org" "Memo")
         ))
 (setq remember-annotation-functions '(org-remember-annotation))
 (setq remember-handler-functions '(org-remember-handler))
@@ -400,13 +401,13 @@
 
 ;; org-capture
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?\n   %i\n   %a  %T")
-		("s" "Schedule" entry (file+headline "~/memo/agenda.org" "Tasks") "** %?  %i  %a  %U")
-		("w" "Work" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?   :work:  %i  %a  %U")
-		("l" "WorkLog" entry (file+headline "~/memo/agenda.org" "Logs") "** %t   :log:")
-		("h" "Home" entry (file+headline "~/memo/agenda.org" "Inbox") "** TODO %?   :home: %i %a %U")
-		("c" "CafeTODO" entry (file+headline "~/memo/cafe.org" "Inbox") "** TODO %?   :cafe: %i %a %U")
-		("m" "Memo" entry (file+headline "~/memo/note.org" "Memo") "** %? %i %a %U")
+      '(("t" "Todo"		entry (file+headline "~/memo/agenda.org" "Inbox")	"** TODO %?\n   %i\n   %a  %T")
+		("s" "Schedule" entry (file+headline "~/memo/agenda.org" "Tasks")	"** %?  %i  %a  %U")
+		("w" "Work"		entry (file+headline "~/memo/agenda.org" "Inbox")	"** TODO %?   :work:  %i  %a  %U")
+		("l" "WorkLog"	entry (file+headline "~/memo/agenda.org" "Logs")	"** %t   :log:")
+		("h" "Home"		entry (file+headline "~/memo/agenda.org" "Inbox")	"** TODO %?   :home: %i %a %U")
+		("c" "CafeTODO" entry (file+headline "~/memo/cafe.org"   "Inbox")	"** TODO %?   :cafe: %i %a %U")
+		("m" "Memo"		entry (file+headline "~/memo/note.org"   "Memo")	"** %? %i %a %U")
 		))
 (define-key global-map "\C-cc" 'org-capture)
 
@@ -482,11 +483,23 @@
 ;; ------------------------------------------------------------------------
 ;; hit-a-hint
 (require 'jaunte)
-
+(global-set-key (kbd "C-'") 'jaunte)
 
 ;; ------------------------------------------------------------------------
 ;; git-gutter
 (global-git-gutter-mode t)
+
+;; ------------------------------------------------------------------------
+;; firefox 
+(require 'moz)
+
+(defun moz-browser-reload ()
+  (interactive)
+  (comint-send-string
+   (inferior-moz-process)
+   "BrowserReload();"))
+
+(global-set-key '[f5] 'moz-browser-reload)
 
 ;; ------------------------------------------------------------------------
 ;; move to home dir
