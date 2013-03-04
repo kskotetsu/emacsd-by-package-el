@@ -95,6 +95,7 @@
 (global-set-key (kbd "C-c l") 'windmove-right)
 (global-set-key (kbd "C-c k") 'windmove-up)
 
+(global-set-key (kbd "M-o") 'helm-occur)
 (global-set-key (kbd "C-r") 'helm-resume)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-c g") 'helm-do-grep)
@@ -199,6 +200,12 @@
 ;; popwin
 (require 'popwin)
 (setq display-buffer-function 'popwin:display-buffer)
+(push '("*Help*" :height 20) popwin:special-display-config)
+(push '("*All*" :height 20) popwin:special-display-config)
+(push '("*guide-key*" :height 20) popwin:special-display-config)
+(push '("*Helm Completions*" :height 20) popwin:special-display-config)
+(push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
+
 
 ;; ------------------------------------------------------------------------
 ;; helm-mode
@@ -447,6 +454,7 @@
 ;; ------------------------------------------------------------------------
 ;; expand-region
 (global-set-key "\M-\[" 'er/expand-region) 
+(global-set-key "\M-\]" 'er/contract-region) 
 
 ;; ------------------------------------------------------------------------
 ;; gtags
