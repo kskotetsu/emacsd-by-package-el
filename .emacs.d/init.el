@@ -95,7 +95,15 @@
 (global-set-key (kbd "C-c l") 'windmove-right)
 (global-set-key (kbd "C-c k") 'windmove-up)
 
-(global-set-key (kbd "C-S-g") 'helm-do-grep)
+(global-set-key (kbd "C-r") 'helm-resume)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-c g") 'helm-do-grep)
+(global-set-key (kbd "C-c s") 'helm-semantic-or-imenu)
+(define-key helm-map (kbd "C-h") 'delete-backward-char)
+;; (eval-after-load 'helm
+;;   '(progn
+;;      (define-key helm-map (kbd "C-h") 'delete-backward-char)
+;;      ))
 
 ;; backspaceキーをインクリメンタルサーチ中のミニバッファで有効にする
 (define-key isearch-mode-map [backspace] 'isearch-delete-char)
@@ -461,6 +469,7 @@
 ;; ------------------------------------------------------------------------
 ;; guide-key
 (require 'guide-key)
+(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
 (setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
 (setq guide-key/highlight-command-regexp "rectangle")
 (defun guide-key/my-hook-function-for-org-mode ()
